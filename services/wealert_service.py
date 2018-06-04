@@ -114,6 +114,8 @@ class Wealert(BaseService):
         session.commit()
 
     def group_note_receiver(self, msg):
+        """ Handle group notes such as the notification of new group member.
+        """
         if u'邀请' in msg['Content'] or u'invited' in msg['Content']:
             str = msg['Content']
             pos_start = str.find('"')
@@ -127,6 +129,23 @@ class Wealert(BaseService):
                 (invitee, inviter), itchat.search_chatrooms(
                 userName=msg['FromUserName'])['NickName'])
 
+            group_name = itchat.search_chatrooms(
+                userName=msg['FromUserName'])['NickName']
+
+            created_time = datetime.datetime.utcfromtimestamp(
+                msg['CreateTime'])
+
+            record = WealertGroupNewMemberHistory(
+                        owner_uin=self._uin,
+                        owner_nickname=self._nickname,
+                        group_name = group_name,
+                        inviter=inviter,
+                        invitee=invitee,
+                        message_time=created_time.strftime("%Y-%m-%d %H:%M:%S"))
+
+            session = self._session()
+            session.add(record)
+            session.commit()
 
 
 """
