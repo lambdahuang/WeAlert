@@ -24,7 +24,7 @@ if __name__ == '__main__':
         yamlconfig = yaml.load(fp.read())
 
     engine = create_engine(
-        'mysql+pymysql://{user}:{pw}@{addr}:{port}/{dbname}'.format(
+        'mysql+pymysql://{user}:{pw}@{addr}:{port}/{dbname}?charset=utf8mb4'.format(
             user=yamlconfig['mysql_user'],
             pw=yamlconfig['mysql_password'],
             addr=yamlconfig['mysql_address'],
