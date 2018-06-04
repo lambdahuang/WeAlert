@@ -43,3 +43,22 @@ class WealertRegularChatHistory(Base):
     Index('idx_ts', message_time)
     Index('idx_sender', sender)
 
+
+class WealertGroupNewMemberHistory(Base):
+    """ Group newly added member history"""
+
+    __tablename__ = 'wechat_group_new_member_records'
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    owner_uin = Column(VARCHAR(length=255))  # owner uniqu wechat ID
+    owner_nickname = Column(VARCHAR(length=255))
+    group_name = Column(VARCHAR(length=255))
+    inviter = Column(VARCHAR(length=255))
+    invitee = Column(VARCHAR(length=255))
+    message_hash = Column(VARCHAR(length=255))  # if message is not textual content, than given the hash here
+    message_time = Column(DATETIME)  # the UTC time of message creation.
+    last_modified = Column(TIMESTAMP,server_default=text('CURRENT_TIMESTAMP'))
+
+    Index('idx_ts', message_time)
+    Index('idx_group_name', group_name)
+    Index('idx_inviter', inviter)
+    Index('idx_invitee', invitee)

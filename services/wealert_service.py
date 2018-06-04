@@ -1,4 +1,7 @@
-from mysql.wealert_db import WealertGroupChatHistory, WealertRegularChatHistory
+from mysql.wealert_db import (
+        WealertGroupChatHistory,
+        WealertRegularChatHistory,
+        WealertGroupNewMemberHistory)
 
 from services.service import BaseService
 
@@ -25,6 +28,7 @@ class Wealert(BaseService):
 
         WealertGroupChatHistory.metadata.create_all(self._db_engine)
         WealertRegularChatHistory.metadata.create_all(self._db_engine)
+        WealertGroupNewMemberHistory.metadata.create_all(self._db_engine)
 
         global wechat_responder
         wechat_responder = self
@@ -108,6 +112,45 @@ class Wealert(BaseService):
         session = self._session()
         session.add(record)
         session.commit()
+
+    def group_note_receiver(self, msg):
+        if u'邀请' in msg['Content'] or u'invited' in msg['Content']:
+            str = msg['Content']
+            pos_start = str.find('"')
+            pos_end = str.find('"', pos_start+1)
+            inviter = str[pos_start+1:pos_end]
+            rpos_start = str.rfind('"')
+            rpos_end = str.rfind('"', 0, rpos_start)
+            invitee = str[(rpos_end+1): rpos_start]
+            print(
+                "@%s 欢迎来到本群[微笑]，感谢%s邀请。" %
+                (invitee, inviter), itchat.search_chatrooms(
+                userName=msg['FromUserName'])['NickName'])
+
+
+
+"""
+@itchat.msg_register(itchat.content.SYSTEM)
+def get_uin(msg):
+    if msg['SystemInfo'] != 'uins': return
+    ins = itchat.instanceList[0]
+    fullContact = ins.memberList + ins.chatroomList + ins.mpList
+    print('** Uin Updated **')
+    print(json.dumps(msg))
+    for username in msg['Text']:
+        member = itchat.utils.search_dict_list(
+            fullContact, 'UserName', username)
+        print(('[SYSTEM] %s: %s' % (
+            member.get('NickName', ''), member['Uin']))
+            .encode(sys.stdin.encoding, 'replace'))
+"""
+
+@itchat.msg_register(itchat.content.NOTE, isGroupChat=True)
+def group_note_receiver(msg):
+    """ callback func to receive note chat
+        :param msg: A dictionary contains various information of a message
+    """
+    wechat_responder.group_note_receiver(msg)
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
