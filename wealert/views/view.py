@@ -15,7 +15,7 @@ def group_note_receiver(msg):
         pos_start = 0
         pos_end = invitation.find(' invited', pos_start+1)
         inviter = invitation[pos_start:pos_end]
-        xpos_end = invitation.find(' to the group chat.')
+        xpos_end = invitation.find(' to the group chat')
         invitee = invitation[(pos_end+9): xpos_end]
         group_name = itchat.search_chatrooms(
             userName=msg['FromUserName'])['NickName']
