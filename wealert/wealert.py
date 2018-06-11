@@ -1,11 +1,6 @@
 import logging
-import optparse
-
 import yaml
-
-from services.wealert_service import Wealert
-
-from sqlalchemy import *
+from wealert.services.wealert_service import Wealert
 
 logger_format = '%(asctime)-30s %(levelname)-10s %(message)s'
 formatter = logging.Formatter(logger_format)
@@ -22,25 +17,9 @@ if __name__ == '__main__':
 
     with open('local_config.yaml', 'r') as fp:
         yamlconfig = yaml.load(fp.read())
-
-    engine = create_engine(
-        'mysql+pymysql://{user}:{pw}@{addr}:{port}/{dbname}?charset=utf8mb4'.format(
-            user=yamlconfig['mysql_user'],
-            pw=yamlconfig['mysql_password'],
-            addr=yamlconfig['mysql_address'],
-            port=yamlconfig['mysql_port'],
-            dbname=yamlconfig['mysql_database']
-        ),
-        echo=True)
-
-
     config = dict()
     config['logger'] = logger
-    config['db_engine'] = engine
-
-    wealert = Wealert(config)
-
-
+    Wealert(config)
     import time
     while(True):
         time.sleep(1)
