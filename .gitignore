@@ -30,3 +30,5 @@ env/*
 
 *.log
 *.yaml
+*.pkl
+__pycache__
