@@ -1,3 +1,4 @@
 sqlalchemy
 PyMySQL
 itchat
+pyyaml

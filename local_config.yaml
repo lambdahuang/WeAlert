@@ -1,5 +1,0 @@
-mysql_address: "localhost"
-mysql_user: "root"
-mysql_password: "AHUTLAMDA"
-mysql_database: "wealert"
-mysql_port: 33433

@@ -6,7 +6,7 @@ from sqlalchemy import TIMESTAMP
 from sqlalchemy import TEXT
 from sqlalchemy import Index
 from sqlalchemy import text
-from wealert.data_model.database import Base
+from wealert.database import Base
 
 
 class WealertGroupChat(Base):
