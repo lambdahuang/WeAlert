@@ -3,7 +3,7 @@ from wealert.services.service import BaseService
 from wealert.data_model.wealert import WealertGroupChat
 from wealert.data_model.wealert import WealertRegularChat
 from wealert.data_model.wealert import WealertGroupNewMember
-from wealert.data_model.database import engine
+from wealert.database import engine
 from wealert.views.view import run_itchat
 
 

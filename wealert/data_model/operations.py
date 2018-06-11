@@ -1,4 +1,4 @@
-from wealert.data_model.database import session
+from wealert.database import session
 from wealert.data_model.wealert import WealertGroupChat
 from wealert.data_model.wealert import WealertRegularChat
 from wealert.data_model.wealert import WealertGroupNewMember
