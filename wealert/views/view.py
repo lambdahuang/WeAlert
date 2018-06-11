@@ -1,6 +1,7 @@
 import itchat
 from wealert.data_model.operations import add_group_chat
 from wealert.data_model.operations import add_regular_chat
+from wealert.data_model.operations import add_group_new_member_log
 
 
 @itchat.msg_register(itchat.content.NOTE, isGroupChat=True)
@@ -8,21 +9,30 @@ def group_note_receiver(msg):
     """ callback func to receive note chat
         :param msg: A dictionary contains various information of a message
     """
+    print(msg['Content'])
     if u'邀请' in msg['Content'] or u'invited' in msg['Content']:
-        str = msg['Content']
-        pos_start = str.find('"')
-        pos_end = str.find('"', pos_start+1)
-        inviter = str[pos_start+1:pos_end]
-        rpos_start = str.rfind('"')
-        rpos_end = str.rfind('"', 0, rpos_start)
-        invitee = str[(rpos_end+1): rpos_start]
+        invitation = msg['Content']
+        pos_start = 0
+        pos_end = invitation.find(' invited', pos_start+1)
+        inviter = invitation[pos_start:pos_end]
+        xpos_end = invitation.find(' to the group chat.')
+        invitee = invitation[(pos_end+9): xpos_end]
         group_name = itchat.search_chatrooms(
             userName=msg['FromUserName'])['NickName']
         msg_created_time = msg['CreateTime']
         print(
                 "@%s 欢迎来到本群[微笑]，感谢%s邀请。" %
                 (invitee, inviter), itchat.search_chatrooms(
-                userName=msg['FromUserName'])['NickName'])
+                    userName=msg['FromUserName'])['NickName'])
+
+        add_group_new_member_log(
+            owner_uin=owner_dict['Uin'],
+            owner_nickname=owner_dict['NickName'],
+            group_name=group_name,
+            inviter=inviter,
+            invitee=invitee,
+            msg_created_time=msg_created_time
+        )
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)

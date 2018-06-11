@@ -86,7 +86,6 @@ def add_group_new_member_log(
         group_name,
         inviter,
         invitee,
-        textual_content,
         msg_created_time):
 
     created_time = datetime.datetime.utcfromtimestamp(
