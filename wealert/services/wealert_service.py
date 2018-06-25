@@ -9,10 +9,9 @@ from wealert.views.view import run_itchat
 
 class Wealert(BaseService):
     """Kicks off the welalert service execution based on the itwechat responds.
-
-    :param config: A dictionary with following keys
-        :param logger:  The logger handle which will be used as an information
-                        output.
+        :param config: A dictionary with following keys
+        :param logger: The logger handle which will be used as an information
+                       output.
     """
     def __init__(self, config):
         BaseService.__init__(self, config)
